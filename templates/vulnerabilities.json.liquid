@@ -1,0 +1,13 @@
+---
+permalink: vulnerabilities.json
+---
+
+[
+{%- for vulnerability in site.data.vulnerabilities %}
+  {
+    "name":      "{{ vulnerability.name }}",
+    "published": "{{ vulnerability.published | date: "%F" }}",
+    "updated":   "{{ vulnerability.updated | date: "%F" }}"
+  },
+{%- endfor %}
+]

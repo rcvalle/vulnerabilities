@@ -1,0 +1,11 @@
+---
+permalink: README.md
+---
+
+Vulnerabilities
+===============
+
+{% for vulnerability in site.data.vulnerabilities %}
+* [{{ vulnerability.name }}](https://cve.mitre.org/cgi-bin/cvename.cgi?name={{ vulnerability.name }})  
+  {{ vulnerability.description }}
+{% endfor %}

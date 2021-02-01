@@ -1,0 +1,38 @@
+name: build
+
+on:
+  schedule:
+    - cron:  '0 0 * * *'
+
+jobs:
+  test:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+
+      - name: Generate data
+        run: |
+          gem install nokogiri xml-simple
+          mkdir -p _data/
+          curl -O https://cve.mitre.org/data/downloads/allitems-cvrf.xml
+          ruby scripts/cve_cvrf_to_yaml_modified.rb --list-file cve_list.txt -o _data/vulnerabilities.yml allitems-cvrf.xml
+          rm -f allitems-cvrf.xml
+
+      - name: Build and deploy
+        run: |
+          rm -f README.md
+          bundle install
+          bundle exec jekyll build
+          cp _site/README.md README.md
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+
+      - name: Deploy to GitHub Pages
+        uses:  helaili/jekyll-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}

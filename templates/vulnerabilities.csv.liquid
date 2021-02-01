@@ -1,0 +1,8 @@
+---
+permalink: vulnerabilities.csv
+---
+
+Name,Published,Updated
+{%- for vulnerability in site.data.vulnerabilities %}
+{{ vulnerability.name }},{{ vulnerability.published | date: "%F" }},{{ vulnerability.updated | date: "%F" }}
+{%- endfor %}
